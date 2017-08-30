@@ -64,9 +64,9 @@ def get_order_data_from_db(qry_str):
     """
         extract data via sql query
         """
-    conn = psycopg2.connect(dbname='matrix',
-                            host='custome-matrix.ce12m1mcioba.us-west-2.rds.amazonaws.com',
-                            port='5432', user='drinks', password='Drinks123')
+    conn = psycopg2.connect(dbname='xxxxx',
+                            host='xxxxxxx',
+                            port='xxxx', user='xxxx', password='xxxxx')
     df3 = pd.read_sql_query(qry_str, conn)
     conn.close()
     return df3
