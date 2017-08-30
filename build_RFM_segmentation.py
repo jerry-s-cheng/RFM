@@ -31,35 +31,6 @@ def _tstamp():
     # time.strftime('%X %x %Z')
     return '[{:s}]'.format(DT.fromtimestamp(ts).strftime('%m-%d %H:%M:%S'))
 
-
-def add_months(start_date, months):
-    """
-    add or subtrack date by month
-    """
-    month = start_date.month - 1 + months
-    year = int(start_date.year + month / 12 )
-    month = month % 12 + 1
-    day = start_date.day
-    return date(year,month,day)
-
-
-def extract_info(db, qry, start_date, csv_file, current_date=date.today(), month_interval=6):
-    """
-    extract data via sql query by time window
-    """
-    count = 0
-    while start_date <= current_date:
-        end_date = add_months(start_date, month_interval)
-        df_output = pd.read_sql_query(qry.format(start_date, end_date), db)
-        if count:
-            df_output.to_csv(csv_file, index=False, sep='|', mode = 'a', header=False)
-        else:
-            df_output.to_csv(csv_file, index=False, sep='|')
-        print('{0} dumped rows: {1:,}'.format(start_date.strftime('%m/%Y'), df_output.shape[0]))
-        count += df_output.shape[0]
-        start_date = end_date
-    print("Output to csv: '{0}' total row count = {1:,}".format(csv_file, count))
-
 def get_order_data_from_db(qry_str):
     """
         extract data via sql query
@@ -81,7 +52,7 @@ def main():
     FROM
     	customer_order
     WHERE lifetime_value >0 AND first_order_date >= '2009-04-13 21:06:20'
-          AND first_order_date < current_date --limit 10000
+          AND first_order_date < current_date
     '''
 
     # Load customer RFM data into dataframe
